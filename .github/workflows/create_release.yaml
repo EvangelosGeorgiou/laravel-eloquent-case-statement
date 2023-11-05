@@ -1,0 +1,69 @@
+name: Create Release Branch
+on:
+  workflow_dispatch:
+    inputs:
+      versionName:
+        description: 'Name of version  (ie 1.5.0)'
+        required: true
+jobs:
+  "Test":
+    runs-on: self-hosted
+    strategy:
+      fail-fast: true
+      matrix:
+        os: [ ubuntu-latest ]
+        php: [ 8.1, 8.0, 7.4 ]
+        stability: [ prefer-stable ]
+
+    name: P${{ matrix.php }} - ${{ matrix.stability }} - ${{ matrix.os }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick, fileinfo
+          coverage: xdebug
+        env:
+          runner: self-hosted
+
+      - name: Setup problem matchers
+        run: |
+          echo "::add-matcher::${{ runner.tool_cache }}/php.json"
+          echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+      - name: Install dependencies
+        run: |
+          composer config github-oauth.github.com ${{ secrets.GIT_TOKEN }}
+          composer update --${{ matrix.stability }} --prefer-dist --no-interaction
+
+      - name: Execute tests
+        run: composer test
+
+  "Create-Release":
+    runs-on: ubuntu-latest
+    needs: "Test"
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@master
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ github.event.inputs.versionName }}
+          release_name: Release v${{ github.event.inputs.versionName }}
+          body: |
+            Release v${{ github.event.inputs.versionName }}
+          draft: false
+          prerelease: false
+      - name: Publish to Production
+        id: publish_to_production
+        uses: devmasx/merge-branch@master
+        with:
+          type: now
+          target_branch: production
+          github_token: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,67 @@
+{
+    "name": "evangeo/laravel-case-statement",
+    "description": "Laravel Case Statement",
+    "type": "library",
+    "autoload": {
+        "files": [
+            "src/Support/functions.php"
+        ],
+        "classmap": [
+            "database/seeds/",
+            "database/factories/",
+            "database/migrations/"
+        ],
+        "psr-4": {
+            "EvangGeo\\CaseStatement\\": "src/",
+            "EvangGeo\\CaseStatement\\Factories\\": "database/factories/",
+            "EvangGeo\\CaseStatement\\Seeders\\": "database/seeds/"
+        }
+    },
+    "autoload-dev": {
+        "classmap": [
+            "database/seeds/",
+            "database/factories/",
+            "database/migrations/"
+        ],
+        "files": [
+            "src/Support/functions.php"
+        ],
+        "psr-4": {
+            "EvangGeo\\CaseStatement\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "analyse": "vendor/bin/phpstan analyse src/**",
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage",
+        "testf": "vendor/bin/phpunit --filter",
+        "tinker": "vendor/bin/psysh"
+    },
+    "minimum-stability": "dev",
+    "require": {
+        "php": "^7.4|^8.0|^8.1",
+        "illuminate/support": "^8.0|^9.0",
+        "illuminate/contracts": "^8.0|^9.0",
+        "laravel/tinker": "^2.7"
+    },
+    "require-dev": {
+        "nunomaduro/collision": "v5.x-dev|^v6.2.0",
+        "orchestra/testbench": "^6.0|^7.0",
+        "phpstan/extension-installer": "^1.1",
+        "phpstan/phpstan-deprecation-rules": "^1.0",
+        "phpstan/phpstan-phpunit": "^1.0",
+        "phpunit/phpunit": "^7.5.15 || ^8.5 || ^9.0"
+    },
+    "config": {
+        "allow-plugins": {
+            "phpstan/extension-installer": true
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "EvangGeo\\CaseStatement\\Providers\\EloquentCaseServiceProvider"
+            ]
+        }
+    }
+}
