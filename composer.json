@@ -1,6 +1,6 @@
 {
-    "name": "evangeo/laravel-case-statement",
-    "description": "Laravel Case Statement",
+    "name": "evangeo/laravel-eloquent-case-statement",
+    "description": "Laravel Eloquent Case Statement",
     "type": "library",
     "autoload": {
         "files": [

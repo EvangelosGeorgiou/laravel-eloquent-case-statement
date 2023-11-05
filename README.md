@@ -1,10 +1,10 @@
 
-# Eloquent Builders
+# Laravel Eloquent Case Statement Builder
 
 ### Installation
 
 ```
-composer require 
+composer require evangeo/laravel-eloquent-case-statement
 ```
 
 
